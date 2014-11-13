@@ -37,7 +37,7 @@
         var amount = document.getElementById('amount').value * 100;
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://114.215.237.77:8081/example/pay.php", true);
+        xhr.open("POST", "YOUR-URL", true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify({
             channel: channel.toString(),
@@ -54,8 +54,11 @@
 
     function app_pay(channel) {
         var amount = document.getElementById('amount').value * 100;
-        // 如果是 iOS 用 PINGPP_IOS_SDK.callPay(channel.toString(), amount);
-        PINGPP_ANDROID_SDK.callPay(channel.toString(), amount);
+        if (typeof PINGPP_IOS_SDK !== 'undefined') {
+            PINGPP_IOS_SDK.callPay(channel.toString(), amount);
+        } else if (typeof PINGPP_ANDROID_SDK !== 'undefined') {
+            PINGPP_ANDROID_SDK.callPay(channel.toString(), amount);
+        }
     }
 </script>
 </body>
