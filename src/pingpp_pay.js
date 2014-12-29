@@ -1,6 +1,11 @@
 var PINGPP_PAY_SDK = window.PINGPP_PAY_SDK || {};
 
-PINGPP_PAY_SDK.payment = function (charge_json) {
+PINGPP_PAY_SDK.VERSION = '2.0.0';
+PINGPP_PAY_SDK._resultCallback;
+PINGPP_PAY_SDK.createPayment = function (charge_json, callback) {
+    if (typeof callback == "function") {
+        PINGPP_PAY_SDK._resultCallback = callback;
+    }
     function form_submit(url, method, params) {
         var form = document.createElement("form");
         form.setAttribute("method", method);
@@ -20,47 +25,109 @@ PINGPP_PAY_SDK.payment = function (charge_json) {
         form.submit();
     }
 
-    var charge = JSON.parse(charge_json);
-    var credential = charge.credential;
-
-    if (charge.hasOwnProperty('livemode')) {
-        if (charge['livemode'] == true) {
-            if (credential && credential.hasOwnProperty('upmp_wap')) {   // 调起银联支付控件，客户端需要安装银联支付控件才能调起
-                var paydata = credential['upmp_wap']['paydata'];
-                var upmp_link = document.createElement("a");
-                upmp_link.setAttribute('href', 'uppay://uppayservice/?style=token&paydata=' + paydata);
-                upmp_link.style.display = 'none';
-                document.body.appendChild(upmp_link);
-
-                // 模拟链接点击事件
-                var e = document.createEvent("MouseEvents");
-                e.initEvent("click", true, true);
-                upmp_link.dispatchEvent(e);
-            } else if (credential.hasOwnProperty('alipay_wap')) {       // 调起支付宝手机网页支付
-                credential['alipay_wap']['_input_charset'] = 'utf-8';
-                form_submit('http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8"', 'get', credential['alipay_wap']);
+    function stringify_data(data) {
+        var output = [];
+        for (var i in data) {
+            if (i == 'url') {
+                continue;
             }
-        } else if (charge['livemode'] == false) {                       // 测试模式
-            var testmode_notify=function(ch_id){
-                var request = new XMLHttpRequest();
-                request.open('GET', 'https://api.pingplusplus.com/notify/charges/'+ch_id+'?livemode=false', true);
-                request.onload = function() {
-                    if (request.status >= 200 && request.status < 400 && request.responseText == "success"){
-                        alert('测试通过')
-                    } else {
-                        alert('测试失败')
-                    }
-                };
-                request.onerror = function() {
-                    alert('网络错误')
-                };
-                request.send();
-            }
-            if (credential.hasOwnProperty('upmp_wap') || credential.hasOwnProperty('alipay_wap')) {
-                testmode_notify(charge['id']);
-            } else {
-                alert('错误 : 未知渠道')
-            }
+            output.push(i + '=' + data[i]);
         }
+        return output.join('&');
     }
+    var charge;
+    if(typeof charge_json == "string"){
+        try{
+            charge = JSON.parse(charge_json);
+        }catch(err){
+            PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("json_decode_fail"));
+            return;
+        }
+    }else{
+        charge = charge_json;
+    }
+    if(typeof charge == "undefined"){
+        PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("json_decode_fail"));
+        return;
+    }
+    if(!charge.hasOwnProperty('id')){
+        PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_charge", "no_charge_id"));
+        return;
+    }
+    if(!charge.hasOwnProperty('channel')){
+        PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_charge", "no_channel"));
+        return;
+    }
+    if(!charge.hasOwnProperty('livemode')){
+        PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_charge", "no_livemode"));
+        return;
+    }
+    if(!charge.hasOwnProperty('credential')){
+        PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_charge", "no_credential"));
+        return;
+    }
+    var credential = charge.credential;
+    if(charge['livemode'] == false){
+        var testmode_notify=function(ch_id){
+            var request = new XMLHttpRequest();
+            request.open('GET', 'https://api.pingplusplus.com/notify/charges/'+ch_id+'?livemode=false', true);
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400 && request.responseText == "success"){
+                    PINGPP_PAY_SDK._innerCallback("success");
+                } else {
+                    var extra = 'http_code:'+request.status+',response:'+request.responseText;
+                    PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("testmode_notify_fail", extra));
+                }
+            };
+            request.onerror = function() {
+                PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("connection_error"));
+            };
+            request.send();
+        }
+        if (charge['channel'] == 'upmp_wap'
+            || charge['channel'] == 'alipay_wap'
+            || charge['channel'] == 'bfb_wap'
+            || charge['channel'] == 'upacp_wap') {
+            testmode_notify(charge['id']);
+        } else {
+            PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_charge", "no_such_channel:"+ charge['channel']));
+        }
+        return;
+    }
+    if (credential && credential.hasOwnProperty('upmp_wap')) {   // 调起银联支付控件，客户端需要安装银联支付控件才能调起
+        var paydata = credential['upmp_wap']['paydata'];
+        location.href = 'uppay://uppayservice/?style=token&paydata=' + paydata;
+    } else if (credential.hasOwnProperty(['upacp_wap'])) {
+        form_submit('https://101.231.204.80:5000/gateway/api/frontTransReq.do', 'post', credential['upacp_wap']); // test url
+    } else if (credential && credential.hasOwnProperty('alipay_wap')) {       // 调起支付宝手机网页支付
+        credential['alipay_wap']['_input_charset'] = 'utf-8';
+        form_submit('http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8"', 'get', credential['alipay_wap']);
+    } else if (credential && credential.hasOwnProperty('bfb_wap')) {
+        if (!credential['bfb_wap'].hasOwnProperty('url')) {
+            PINGPP_PAY_SDK._innerCallback("fail", PINGPP_PAY_SDK._error("invalid_credential", "missing_field: url"));
+            return;
+        }
+        location.href = credential['bfb_wap']['url'] + '?' + stringify_data(credential['bfb_wap']);
+    }
+};
+
+PINGPP_PAY_SDK.payment = PINGPP_PAY_SDK.createPayment;
+
+PINGPP_PAY_SDK._innerCallback = function(result, err){
+    if(typeof PINGPP_PAY_SDK._resultCallback == "function"){
+        if(typeof err == "undefined"){
+            err = PINGPP_PAY_SDK._error();
+        }
+        PINGPP_PAY_SDK._resultCallback(result, err);
+        PINGPP_PAY_SDK._resultCallback = undefined;
+    }
+};
+
+PINGPP_PAY_SDK._error = function(msg, extra){
+    msg = (typeof msg == "undefined") ? "" : msg;
+    extra = (typeof extra == "undefined") ? "" : extra;
+    return {
+        msg:msg,
+        extra:extra
+    };
 };
