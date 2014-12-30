@@ -27,6 +27,7 @@
                 <span class="up" onclick="app_pay('upmp')">银 联</span>
                 <span class="up" onclick="wap_pay('upmp_wap')">银联WAP</span>
                 <span class="up" onclick="wap_pay('alipay_wap')">支付宝WAP</span>
+                <span class="up" onclick="wap_pay('bfb_wap')">百付宝WAP</span>
             </div>
         </div>
     </div>
@@ -47,7 +48,9 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
-                PINGPP_PAY_SDK.payment(xhr.responseText);
+                PINGPP_PAY_SDK.createPayment(xhr.responseText, function(result, err) {
+                    console.log(result);
+                });
             }
         }
     }
