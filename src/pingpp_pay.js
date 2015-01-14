@@ -108,12 +108,12 @@ PINGPP_PAY_SDK.createPayment = function (charge_json, callback) {
         }
         return;
     }
-    if (credential && credential.hasOwnProperty('upmp_wap')) {   // 调起银联支付控件，客户端需要安装银联支付控件才能调起
+    if (credential && credential.hasOwnProperty('upmp_wap')) {  // 调起银联支付控件，客户端需要安装银联支付控件才能调起
         var paydata = credential['upmp_wap']['paydata'];
         location.href = UPMP_WAP_URL + paydata;
     } else if (credential.hasOwnProperty(['upacp_wap'])) {
-        form_submit(UPACP_WAP_URL, 'post', credential['upacp_wap']); // test url
-    } else if (credential && credential.hasOwnProperty('alipay_wap')) {       // 调起支付宝手机网页支付
+        form_submit(UPACP_WAP_URL, 'post', credential['upacp_wap']);
+    } else if (credential && credential.hasOwnProperty('alipay_wap')) {  // 调起支付宝手机网页支付
         credential['alipay_wap']['_input_charset'] = 'utf-8';
         form_submit(ALIPAY_WAP_URL, 'get', credential['alipay_wap']);
     } else if (credential && credential.hasOwnProperty('bfb_wap')) {
