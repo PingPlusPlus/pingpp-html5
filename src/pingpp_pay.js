@@ -159,20 +159,25 @@ PingppSDK.prototype = {
   _testModeNotify: function(charge) {
     var self = this;
     if (charge['channel'] == channels.wx_pub) {
-      var request = new XMLHttpRequest();
-      request.open('GET', cfg.PINGPP_NOTIFY_URL+charge['id']+'?livemode=false', true);
-      request.onload = function() {
-        if (request.status >= 200 && request.status < 400 && request.responseText == "success"){
-          self._innerCallback("success");
-        } else {
-          var extra = 'http_code:'+request.status+';response:'+request.responseText;
-          self._innerCallback("fail", self._error("testmode_notify_fail", extra));
-        }
-      };
-      request.onerror = function() {
-        self._innerCallback("fail", self._error("network_err"));
-      };
-      request.send();
+      var dopay = confirm("模拟付款？");
+      if (dopay) {
+        var request = new XMLHttpRequest();
+        request.open('GET', cfg.PINGPP_NOTIFY_URL+charge['id']+'?livemode=false', true);
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 400 && request.responseText == "success"){
+            self._innerCallback("success");
+          } else {
+            var extra = 'http_code:'+request.status+';response:'+request.responseText;
+            self._innerCallback("fail", self._error("testmode_notify_fail", extra));
+          }
+        };
+        request.onerror = function() {
+          self._innerCallback("fail", self._error("network_err"));
+        };
+        request.send();
+      } else {
+        self._innerCallback("cancel");
+      }
     } else {
       var params = {
         'ch_id': charge['id'],
@@ -180,7 +185,7 @@ PingppSDK.prototype = {
         'channel': charge['channel']
       };
       if (hasOwn.call(charge, 'order_no')) {
-        params['order_no'] = order_no;
+        params['order_no'] = charge['order_no'];
       }
       if (hasOwn.call(charge, 'extra')) {
         params['extra'] = encodeURIComponent(JSON.stringify(charge['extra']));

@@ -1,4 +1,4 @@
-# pingpp-HTML5
+# Pingpp HTML5 SDK
 ---------------
 
 ## 简介
@@ -7,10 +7,15 @@
 ## 接入方法
 详细请参见 [技术文档](https://pingxx.com/document) 和 示例代码。如果还有疑惑，请联系 Ping++ 寻求帮助。
 
-## 微信公众号 SDK
-请查看[wxpub](https://github.com/PingPlusPlus/pingpp-html5/tree/master/wxpub)
+## 微信公众号 SDK 接入方法
+请查看 [wxpub](https://github.com/PingPlusPlus/pingpp-html5/tree/master/wxpub)
 
 ## 更新日志
+
+### 2.0.1
+* 更改：<br>
+新的测试模式<br>
+合并 HTML5 和 微信公众号 SDK
 
 ### 2.0.0
 * 更改：<br>

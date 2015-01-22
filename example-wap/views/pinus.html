@@ -22,8 +22,10 @@
             </label>
 
             <div class="ch">
-                <span class="up" onclick="wap_pay('upmp_wap')">银联WAP</span>
+                <span class="up" onclick="wap_pay('upmp_wap')">银联WAP(upmp)</span>
+                <span class="up" onclick="wap_pay('upacp_wap')">银联WAP(upacp)</span>
                 <span class="ap" onclick="wap_pay('alipay_wap')">支付宝WAP</span>
+                <span class="up" onclick="wap_pay('bfb_wap')">百付宝WAP</span>
             </div>
         </div>
     </div>
@@ -34,17 +36,20 @@
         var amount = document.getElementById('amount').value * 100;
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "YOUR-DOMAIN", true);
+        xhr.open("POST", "YOUR-URL", true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify({
-            channel: channel.toString(),
+            channel: channel,
             amount: amount
         }));
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
-                PINGPP_PAY_SDK.payment(xhr.responseText);
+                pingpp.createPayment(xhr.responseText, function(result, err) {
+                    console.log(result);
+                    console.log(err);
+                });
             }
         }
     }

@@ -1,6 +1,7 @@
 # 微信公众号 SDK
 ---------------
-
+## 注意
+**JS 文件已经与 [HTML5 SDK](https://github.com/PingPlusPlus/pingpp-html5) 合并，请使用合并后的 SDK。**
 ## 接入方法
 1. 用 Server-SDK 取得 `openid`(微信公众号授权用户唯一标识)，以 php 为例
     - 先跳转到微信获取`授权 code`，地址由下方代码生成，`$wx_app_id` 是你的`微信公众号应用唯一标识`，`$redirect_url` 是用户确认授权后跳转的地址，用来接收 `code`
