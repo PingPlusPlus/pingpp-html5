@@ -36,10 +36,10 @@
       }
     }
     ```
-3. 得到 `charge` 后，在页面中引用 `pingpp_wx_pub.js`，调用 `PINGPP_WX_PUB.createPayment`
+3. 得到 `charge` 后，在页面中引用 `pingpp_wx_pub.js`，调用 `pingpp.createPayment`
 
     ```js
-    PINGPP_WX_PUB.createPayment(charge, function(result, err){
+    pingpp.createPayment(charge, function(result, err){
         if(result=="success"){
             // payment succeed
         } else {
