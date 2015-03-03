@@ -41,4 +41,4 @@ proguard/
 .idea/
 *.iml
 .settings/
-
+Thumbs.db

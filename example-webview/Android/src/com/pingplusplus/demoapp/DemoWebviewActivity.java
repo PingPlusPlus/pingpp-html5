@@ -1,5 +1,6 @@
-package com.pingplusplus.pinus;
+package com.pingplusplus.demoapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -14,15 +15,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.*;
-
 import java.io.IOException;
 
-public class PinusWebviewActivity extends Activity {
-    private static final String URL = "YOUR-DOMAIN";
+public class DemoWebviewActivity extends Activity {
+    private static final String URL = "YOUR-CHARGE-URL";
 
     private WebView webView;
     private ProgressBar progressBar;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class PinusWebviewActivity extends Activity {
         progressBar.setProgress(0);
 
         webView = (WebView) findViewById(R.id.webview);
-        webView.loadUrl("YOUR-WEBVIEW-DOMAIN");
+        webView.loadUrl("YOUR-WEBVIEW-URL");
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -135,7 +136,7 @@ public class PinusWebviewActivity extends Activity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
         	// 更新进度条
-            PinusWebviewActivity.this.setValue(newProgress);
+            DemoWebviewActivity.this.setValue(newProgress);
             super.onProgressChanged(view, newProgress);
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="appName">心益</string>
+    <string name="appName">demoapp</string>
     <string name="ok">完成</string>
     <string name="wechant">微信</string>
     <string name="alipay">支付宝</string>
