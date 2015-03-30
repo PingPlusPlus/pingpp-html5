@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.1",
+  version = "2.0.2",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
@@ -108,7 +108,7 @@ PingppSDK.prototype = {
 
   _jsApiCall: function(){
     var self = this;
-    if(this._jsApiParameters != {}){
+    if(self._jsApiParameters != {}){
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         self._jsApiParameters,
@@ -126,12 +126,16 @@ PingppSDK.prototype = {
   },
 
   _callpay: function(){
+    var self = this;
     if (typeof WeixinJSBridge == "undefined"){
+      function eventCallback(){
+        self._jsApiCall();
+      }
       if(document.addEventListener){
-        document.addEventListener('WeixinJSBridgeReady', this._jsApiCall, false);
+        document.addEventListener('WeixinJSBridgeReady', eventCallback, false);
       }else if(document.attachEvent){
-        document.attachEvent('WeixinJSBridgeReady', this._jsApiCall); 
-        document.attachEvent('onWeixinJSBridgeReady', this._jsApiCall);
+        document.attachEvent('WeixinJSBridgeReady', eventCallback);
+        document.attachEvent('onWeixinJSBridgeReady', eventCallback);
       }
     }else{
       this._jsApiCall();

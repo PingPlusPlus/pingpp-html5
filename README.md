@@ -11,6 +11,9 @@
 请查看 [wxpub](https://github.com/PingPlusPlus/pingpp-html5/tree/master/wxpub)
 
 ## 更新日志
+### 2.0.2
+* 更改：<br>
+修正微信公众号 JSAPI 未加载完成时调用的问题
 
 ### 2.0.1
 * 更改：<br>
