@@ -61,6 +61,7 @@
         }
     }
 
+    // app_pay 需要配合 example-webview 的 iOS 或者 Android 项目使用。
     function app_pay(channel) {
         var amount = document.getElementById('amount').value * 100;
         if (typeof PINGPP_IOS_SDK !== 'undefined') {
