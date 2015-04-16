@@ -9,6 +9,8 @@ var
     ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm',
     UPMP_WAP_URL: 'uppay://uppayservice/?style=token&paydata=',
     BFB_SUCCESS: '<html><head><meta name="VIP_BFB_PAYMENT" content="BAIFUBAO"></head><body></body></html>',
+    YEEPAY_WAP_URL: 'https://ok.yeepay.com/paymobile/api/pay/request',
+    YEEPAY_WAP_TEST_URL: 'http://mobiletest.yeepay.com/paymobile/api/pay/request',
     PINGPP_MOCK_URL: 'http://sissi.pingxx.com/mock.php'
   },
   channels = {
@@ -16,7 +18,8 @@ var
     upmp_wap: 'upmp_wap',
     upacp_wap: 'upacp_wap',
     bfb_wap: 'bfb_wap',
-    wx_pub: 'wx_pub'
+    wx_pub: 'wx_pub',
+    yeepay_wap: 'yeepay_wap'
   };
 
 PingppSDK.prototype = {
@@ -97,7 +100,7 @@ PingppSDK.prototype = {
     } else if (channel == channels.alipay_wap) {  // 调起支付宝手机网页支付
       credential['_input_charset'] = 'utf-8';
       if (typeof _AP != "undefined") {
-        var query = stringify_data(credential, true);
+        var query = stringify_data(credential, channel, true);
         _AP.pay(cfg.ALIPAY_WAP_URL + "?" + query);
       } else {
         form_submit(cfg.ALIPAY_WAP_URL, 'get', credential);
@@ -107,7 +110,20 @@ PingppSDK.prototype = {
         this._innerCallback("fail", this._error("invalid_credential", "missing_field:url"));
         return;
       }
-      location.href = credential['url'] + '?' + stringify_data(credential);
+      location.href = credential['url'] + '?' + stringify_data(credential, channel);
+    } else if (channel == channels.yeepay_wap) {
+      var fields = ["merchantaccount", "encryptkey", "data"];
+      for(var k in fields){
+        if(!hasOwn.call(credential, fields[k])){
+          this._innerCallback("fail", this._error("invalid_credential", "missing_field_"+fields[k]));
+          return;
+        }
+      }
+      if (hasOwn.call(credential, "mode") && credential["mode"] == "test") {
+        location.href = cfg.YEEPAY_WAP_TEST_URL + '?' + stringify_data(credential, channel, true);
+      } else {
+        location.href = cfg.YEEPAY_WAP_URL + '?' + stringify_data(credential, channel, true);
+      }
     } else if (channel == channels.wx_pub) {
       var fields = ["appId", "timeStamp", "nonceStr", "package", "signType", "paySign"];
       for(var k in fields){
@@ -272,13 +288,16 @@ function form_submit(url, method, params) {
   form.submit();
 }
 
-function stringify_data(data, urlencode) {
+function stringify_data(data, channel, urlencode) {
   if (typeof urlencode == "undefined") {
     urlencode = false;
   }
   var output = [];
   for (var i in data) {
-    if (i == 'url') {
+    if (channel == "bfb_wap" && i == "url") {
+      continue;
+    }
+    if (channel == "yeepay_wap" && i == "mode") {
       continue;
     }
     output.push(i + '=' + (urlencode ? encodeURIComponent(data[i]) : data[i]));
