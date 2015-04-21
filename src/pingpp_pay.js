@@ -27,9 +27,19 @@ PingppSDK.prototype = {
 
   _jsApiParameters: {},
 
-  createPayment: function(charge_json, callback) {
+  _debug: false,
+
+  _signature: undefined,
+
+  createPayment: function(charge_json, callback, signature, debug) {
     if (typeof callback == "function") {
       this._resultCallback = callback;
+    }
+    if (typeof signature != "undefined") {
+      this._signature = signature;
+    }
+    if (typeof debug == "boolean") {
+      this._debug = debug;
     }
     var charge;
     if(typeof charge_json == "string"){
@@ -127,13 +137,52 @@ PingppSDK.prototype = {
 
   _callpay: function(){
     var self = this;
-    if (typeof WeixinJSBridge == "undefined"){
+    if (typeof wx != "undefined") {
+      var wxConfigFailed = false;
+      wx.config({
+        debug: self._debug,
+        appId: self._jsApiParameters["appId"],
+        timestamp: self._jsApiParameters["timeStamp"],
+        nonceStr: self._jsApiParameters["nonceStr"],
+        signature: self._signature,
+        jsApiList: ['chooseWXPay']
+      });
+      wx.ready(function(){
+        if (wxConfigFailed) {
+          return;
+        }
+        wx.chooseWXPay({
+          timestamp: self._jsApiParameters["timeStamp"],
+          nonceStr: self._jsApiParameters["nonceStr"],
+          package: self._jsApiParameters["package"],
+          signType: self._jsApiParameters["signType"],
+          paySign: self._jsApiParameters["paySign"],
+          success: function(res) {
+            if (res.errMsg == "chooseWXPay:ok") {
+              self._innerCallback("success");
+            } else {
+              self._innerCallback("fail", self._error("wx_result_fail", res.errMsg));
+            }
+          },
+          cancel: function(res) {
+            self._innerCallback("cancel");
+          },
+          fail: function(res) {
+            self._innerCallback("fail", self._error("wx_result_fail", res.errMsg));
+          }
+        });
+      });
+      wx.error(function(res){
+        wxConfigFailed = true;
+        self._innerCallback("fail", self._error("wx_config_error", res.errMsg));
+      });
+    } else if (typeof WeixinJSBridge == "undefined") {
       function eventCallback(){
         self._jsApiCall();
       }
-      if(document.addEventListener){
+      if (document.addEventListener) {
         document.addEventListener('WeixinJSBridgeReady', eventCallback, false);
-      }else if(document.attachEvent){
+      } else if(document.attachEvent) {
         document.attachEvent('WeixinJSBridgeReady', eventCallback);
         document.attachEvent('onWeixinJSBridgeReady', eventCallback);
       }
@@ -152,8 +201,8 @@ PingppSDK.prototype = {
   },
 
   _innerCallback: function(result, err) {
-    if(typeof this._resultCallback == "function"){
-      if(typeof err == "undefined"){
+    if (typeof this._resultCallback == "function") {
+      if (typeof err == "undefined") {
         err = this._error();
       }
       this._resultCallback(result, err);
