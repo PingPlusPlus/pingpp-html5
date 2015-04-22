@@ -137,7 +137,7 @@ PingppSDK.prototype = {
 
   _callpay: function(){
     var self = this;
-    if (typeof wx != "undefined") {
+    if (typeof wx != "undefined" && typeof self._signature != "undefined") {
       var wxConfigFailed = false;
       wx.config({
         debug: self._debug,
