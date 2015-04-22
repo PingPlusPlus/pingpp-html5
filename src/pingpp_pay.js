@@ -6,7 +6,7 @@ var
   cfg = {
     PINGPP_NOTIFY_URL: 'https://api.pingxx.com/notify/charges/',
     UPACP_WAP_URL: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
-    ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm?_input_charset=utf-8',
+    ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm',
     UPMP_WAP_URL: 'uppay://uppayservice/?style=token&paydata=',
     BFB_SUCCESS: '<html><head><meta name="VIP_BFB_PAYMENT" content="BAIFUBAO"></head><body></body></html>',
     PINGPP_MOCK_URL: 'http://sissi.pingxx.com/mock.php'
@@ -96,7 +96,12 @@ PingppSDK.prototype = {
       form_submit(cfg.UPACP_WAP_URL, 'post', credential);
     } else if (channel == channels.alipay_wap) {  // 调起支付宝手机网页支付
       credential['_input_charset'] = 'utf-8';
-      form_submit(cfg.ALIPAY_WAP_URL, 'get', credential);
+      if (typeof _AP != "undefined") {
+        var query = stringify_data(credential, true);
+        _AP.pay(cfg.ALIPAY_WAP_URL + "?" + query);
+      } else {
+        form_submit(cfg.ALIPAY_WAP_URL, 'get', credential);
+      }
     } else if (channel == channels.bfb_wap) {
       if (!hasOwn.call(credential, 'url')) {
         this._innerCallback("fail", this._error("invalid_credential", "missing_field:url"));
@@ -267,13 +272,16 @@ function form_submit(url, method, params) {
   form.submit();
 }
 
-function stringify_data(data) {
+function stringify_data(data, urlencode) {
+  if (typeof urlencode == "undefined") {
+    urlencode = false;
+  }
   var output = [];
   for (var i in data) {
     if (i == 'url') {
       continue;
     }
-    output.push(i + '=' + data[i]);
+    output.push(i + '=' + (urlencode ? encodeURIComponent(data[i]) : data[i]));
   }
   return output.join('&');
 }
