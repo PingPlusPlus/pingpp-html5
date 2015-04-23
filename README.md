@@ -86,3 +86,14 @@ $signature = \Pingpp\WxpubOauth::getSignature($charge, $ticket);
 ```js
 pingpp.createPayment(charge, callback, signature, false);
 ```
+
+## 在微信客户端中使用支付宝手机网页支付（`alipay_wap`）
+你需要把 [alipay_in_weixin](/alipay_in_weixin) 目录下的两个文件分别放到你的服务器目录。
+
+`ap.js` 只需要在需要调用支付宝的网页中引入
+``` html
+<script src="/path/to/ap.js"></script>
+```
+`pay.htm` 要放到你需要使用支付宝的页面的同级目录下。
+
+- 参考 [支付宝网站的解决方案](https://cshall.alipay.com/enterprise/help_detail.htm?help_id=524702)
