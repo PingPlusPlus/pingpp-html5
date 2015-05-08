@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.3",
+  version = "2.0.4",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
@@ -110,8 +110,8 @@ PingppSDK.prototype = {
       location.href = credential['url'] + '?' + stringify_data(credential);
     } else if (channel == channels.wx_pub) {
       var fields = ["appId", "timeStamp", "nonceStr", "package", "signType", "paySign"];
-      for(var k in fields){
-        if(!hasOwn.call(credential, fields[k])){
+      for (var k in fields) {
+        if (typeof fields[k] !== "function" && !hasOwn.call(credential, fields[k])) {
           this._innerCallback("fail", this._error("invalid_credential", "missing_field_"+fields[k]));
           return;
         }
