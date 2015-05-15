@@ -159,7 +159,7 @@ PingppSDK.prototype = {
         wx.chooseWXPay({
           timestamp: self._jsApiParameters["timeStamp"],
           nonceStr: self._jsApiParameters["nonceStr"],
-          package: self._jsApiParameters["package"],
+          "package": self._jsApiParameters["package"],
           signType: self._jsApiParameters["signType"],
           paySign: self._jsApiParameters["paySign"],
           success: function(res) {
