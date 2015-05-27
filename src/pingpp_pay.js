@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.4",
+  version = "2.0.5",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
@@ -114,7 +114,7 @@ PingppSDK.prototype = {
     } else if (channel == channels.yeepay_wap) {
       var fields = ["merchantaccount", "encryptkey", "data"];
       for(var k in fields){
-        if(!hasOwn.call(credential, fields[k])){
+        if(typeof fields[k] !== "function" && !hasOwn.call(credential, fields[k])){
           this._innerCallback("fail", this._error("invalid_credential", "missing_field_"+fields[k]));
           return;
         }
