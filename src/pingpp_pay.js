@@ -8,6 +8,7 @@ var
     UPACP_WAP_URL: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
     ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm',
     UPMP_WAP_URL: 'uppay://uppayservice/?style=token&paydata=',
+    JDPAY_WAP_URL: 'https://m.jdpay.com/wepay/web/pay',
     BFB_SUCCESS: '<html><head><meta name="VIP_BFB_PAYMENT" content="BAIFUBAO"></head><body></body></html>',
     YEEPAY_WAP_URL: 'https://ok.yeepay.com/paymobile/api/pay/request',
     YEEPAY_WAP_TEST_URL: 'http://mobiletest.yeepay.com/paymobile/api/pay/request',
@@ -19,7 +20,8 @@ var
     upacp_wap: 'upacp_wap',
     bfb_wap: 'bfb_wap',
     wx_pub: 'wx_pub',
-    yeepay_wap: 'yeepay_wap'
+    yeepay_wap: 'yeepay_wap',
+    jdpay_wap: 'jdpay_wap'
   };
 
 PingppSDK.prototype = {
@@ -134,6 +136,8 @@ PingppSDK.prototype = {
       }
       this._jsApiParameters = credential;
       this._callpay();
+    } else if (channel == channels.jdpay_wap) {
+      form_submit(cfg.JDPAY_WAP_URL, 'post', credential);
     }
   },
 
