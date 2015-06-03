@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.5",
+  version = "2.0.6",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
