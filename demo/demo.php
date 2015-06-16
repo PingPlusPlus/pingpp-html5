@@ -10,7 +10,6 @@
 <script type="text/javascript">
     document.getElementById('pay').addEventListener('touchend',function(){
         pingpp_one.init({
-            version:2,
             app_id:'app_1234567890',
             order_no:'no_1234567890',
             price:10,

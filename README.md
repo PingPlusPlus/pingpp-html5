@@ -12,7 +12,6 @@
     <script type="text/javascript">
         document.getElementById(yourElement).addEventListener('touchend',function(){
             pingpp_one.init({
-                version:2,                                  //1或者2
                 app_id:'app_1234567890',                    //该应用在ping++的应用ID
                 order_no:'no_1234567890',                   //订单在商户系统中的订单号
                 price:10,                                   //订单价格，单位：人民币 分
@@ -57,7 +56,7 @@
     $url = \Pingpp\WxpubOAuth::createOauthUrlForCode($wx_app_id, $redirect_url);
     header('Location: ' . $url);
 
-*用户确认授权后，使用 code 获取 openid，其中 $wx_app_secret 是你的微信公众号应用密钥,openid 在调用壹收款 pingpp_one.init 接口时传入
+*用户确认授权后，使用 code 获取 openid，其中 $wx_app_secret 是你的微信公众号应用密钥,openid 在调用壹收款 pingpp_pay.init 接口时传入
 
     <?php
     $code = $_GET['code'];
@@ -78,6 +77,8 @@
             "open_id":$openid
         }
     }
+
+3.由于微信公众号支付只能在微信 webview 中使用，所以你需要在你的页面中判断页面是否在微信 webview 中打开，若在微信 webview 中打开，则在调用 pingpp_one.init 接口时必须传入 open_id 参数，在微信外部打开页面时，壹收款会自动屏蔽微信支付渠道。
 
 ##在微信客户端中使用支付宝手机网页支付（alipay_wap）
 你需要把 alipay_in_weixin 目录下的两个文件分别放到你的服务器目录，确保 ap.js 和 pay.htm 放在你需要使用支付宝的页面的同级目录下。
