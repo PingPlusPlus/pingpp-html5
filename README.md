@@ -2,7 +2,7 @@
 
 ## 引用 pingpp_one.js
 
-1.在你的购买页面底部（</html>标签之前）引用 pingpp_one.js 文件
+1.在你的购买页面内引用 pingpp_one.js 文件
 
     <script type="text/javascript" src="https://one.pingxx.com/lib/pingpp_one.js"></script>
 
@@ -27,7 +27,7 @@
 
     {
         "channel":"alipay",
-        "amount":1,
+        "amount":10,
         "order_no":"no1234567890",
         "open_id":""
     }
