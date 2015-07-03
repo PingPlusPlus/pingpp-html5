@@ -14,7 +14,7 @@
             app_id:'app_1234567890',                     //该应用在ping++的应用ID
             order_no:'no1234567890',                     //订单在商户系统中的订单号
             amount:10,                                   //订单价格，单位：人民币 分
-            channel:['alipay_wap','wx_pub','upacp_wap','jdpay_wap','bfb_wap'],  //壹收款页面上需要展示的渠道，数组，数组顺序即页面展示出的渠道的顺序
+            channel:['alipay_wap','wx_pub','upacp_wap','yeepay_wap','jdpay_wap','bfb_wap'],  //壹收款页面上需要展示的渠道，数组，数组顺序即页面展示出的渠道的顺序
             charge_url:'http://127.0.0.1/createCharge',  //商户服务端创建订单的url
             open_id:'wx1234567890'                       //(可选，使用微信公众号支付时必须传入)
         },function(res){
@@ -26,7 +26,7 @@
 注意，charge_url 需要商户自己开发，该接口需要接收壹收款的 POST 参数，格式为 JSON 字符串，结构如下：
 
     {
-        "channel":"alipay",
+        "channel":"alipay_wap",
         "amount":10,
         "order_no":"no1234567890",
         "open_id":""
