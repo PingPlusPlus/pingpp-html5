@@ -2,7 +2,7 @@
 
 ## 引用 pingpp_one.js
 
-1.在你的购买页面内引用 pingpp_one.js 文件
+1.在你的购买页面内引用 pingpp_one.js 文件，放在 body 的最后面
 
     <script type="text/javascript" src="https://one.pingxx.com/lib/pingpp_one.js"></script>
 
@@ -16,6 +16,7 @@
             amount:10,                                   // 订单价格，单位：人民币 分
             channel:['alipay_wap','wx_pub','upacp_wap','yeepay_wap','jdpay_wap','bfb_wap'],  // 壹收款页面上需要展示的渠道，数组，数组顺序即页面展示出的渠道的顺序
             charge_url:'http://127.0.0.1/createCharge',  // 商户服务端创建订单的url
+            charge_param:{a:1,b:2},                      //(可选，用户自定义参数，若存在自定义参数则壹收款会通过 POST 方法透传给 charge_url)
             open_id:'Q7Xr3Te3aseda8NT6gVfivddSK1p'       // (可选，使用微信公众号支付时必须传入)
         },function(res){
             if(!res.status){
@@ -23,16 +24,18 @@
             }
         });
 
-注意，charge_url 需要商户自己开发，该接口需要接收壹收款的 POST 参数，格式为 JSON 字符串，结构如下：
+注意，charge_url 需要商户自己开发，该接口需要接收壹收款的 POST 参数，如果用户在上述方法中传入了自定义参数，则壹收款会将自定义参数一并 POST，格式为 JSON 字符串，结构如下：
 
     {
         "channel":"alipay_wap",
         "amount":10,
         "order_no":"no1234567890",
-        "open_id":"Q7Xr3Te3aseda8NT6gVfivddSK1p"
+        "open_id":"Q7Xr3Te3aseda8NT6gVfivddSK1p",
+        "a":1,
+        "b":2
     }
 
-只有微信公众号支付时会传 open_id 字段。charge_url 需要将 Ping++ 返回的 Charge 对象原样返回给壹收款。
+只有微信公众号支付时会传 open_id 字段。charge_url 需要将 Ping++ API 的返回内容原样返回给壹收款。
 
 若订单创建成功，则跳转至对应渠道的支付页面进行支付，支付成功后，会跳转到创建 charge 时定义的 result_url 或者 success_url。如果用户取消支付，则会跳转到 result_url 或者 cancel_url（具体情况根据渠道不同会有所变化）。
 
