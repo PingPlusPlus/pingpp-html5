@@ -11,15 +11,15 @@
 1.在你的“购买”按钮点击事件中调用 pingpp_one.init 方法，确保以下代码放置在上面代码的后面，示例：
 
         pingpp_one.init({
-            app_id:'app_1234567890',                     //该应用在ping++的应用ID
-            order_no:'no1234567890',                     //订单在商户系统中的订单号
-            amount:10,                                   //订单价格，单位：人民币 分
-            channel:['alipay_wap','wx_pub','upacp_wap','yeepay_wap','jdpay_wap','bfb_wap'],  //壹收款页面上需要展示的渠道，数组，数组顺序即页面展示出的渠道的顺序
-            charge_url:'http://127.0.0.1/createCharge',  //商户服务端创建订单的url
-            open_id:'wx1234567890'                       //(可选，使用微信公众号支付时必须传入)
+            app_id:'app_1234567890abcDEF',               // 该应用在 Ping++ 的应用ID
+            order_no:'no1234567890',                     // 订单在商户系统中的订单号
+            amount:10,                                   // 订单价格，单位：人民币 分
+            channel:['alipay_wap','wx_pub','upacp_wap','yeepay_wap','jdpay_wap','bfb_wap'],  // 壹收款页面上需要展示的渠道，数组，数组顺序即页面展示出的渠道的顺序
+            charge_url:'http://127.0.0.1/createCharge',  // 商户服务端创建订单的url
+            open_id:'Q7Xr3Te3aseda8NT6gVfivddSK1p'       // (可选，使用微信公众号支付时必须传入)
         },function(res){
             if(!res.status){
-                alert(res.msg);//处理错误
+                alert(res.msg); // 处理错误
             }
         });
 
@@ -29,7 +29,7 @@
         "channel":"alipay_wap",
         "amount":10,
         "order_no":"no1234567890",
-        "open_id":""
+        "open_id":"Q7Xr3Te3aseda8NT6gVfivddSK1p"
     }
 
 只有微信公众号支付时会传 open_id 字段。charge_url 需要将 Ping++ 返回的 Charge 对象原样返回给壹收款。
@@ -44,15 +44,15 @@
                 alert(res.msg);
             }
         },function(){
-            window.location.href="http://pingxx.com";   //示例
+            window.location.href="http://yourdomain.com/payment_succeeded";   //示例
         });
     </script>
 
-###微信公众号接入注意事项
+### 微信公众号接入注意事项
 
 以下示例中，Server-SDK 以 PHP 为例，其他语言请参考各语言 SDK 的文档
 
-####关于 openid
+#### 关于 openid
 
 1.使用 Server-SDK 取得 openid（微信公众号授权用户唯一标识）
 
@@ -86,7 +86,7 @@
 
 3.由于微信公众号支付只能在微信 webview 中使用，所以你需要在你的页面中判断页面是否在微信 webview 中打开，若在微信 webview 中打开，则在调用 pingpp_one.init 接口时必须传入 open_id 参数，在微信外部打开页面时，壹收款会自动屏蔽微信支付渠道。
 
-####在微信客户端中使用支付宝手机网页支付（alipay_wap）
+#### 在微信客户端中使用支付宝手机网页支付（alipay_wap）
 
 你需要把 alipay_in_weixin 目录下的两个文件分别放到你的服务器目录，确保 ap.js 和 pay.htm 放在你需要使用支付宝的页面的同级目录下。
 
