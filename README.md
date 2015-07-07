@@ -2,7 +2,7 @@
 
 ## 引用 pingpp_one.js
 
-1.在你的购买页面内引用 pingpp_one.js 文件，放在 body 的最后面
+在你的购买页面内引用 pingpp_one.js 文件，放在 body 的最后面
 
     <script type="text/javascript" src="https://one.pingxx.com/lib/pingpp_one.js"></script>
 
