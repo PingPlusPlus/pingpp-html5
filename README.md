@@ -58,16 +58,22 @@
 
 若订单创建成功，则跳转至对应渠道的支付页面进行支付，支付成功后，会跳转到创建 charge 时定义的 result_url 或者 success_url (微信公众号的回调方法壹收款会自动处理,跳转到壹收款成功页面)。如果用户取消支付，则会跳转到 result_url 或者 cancel_url（具体情况根据渠道不同会有所变化）。
 
-2.若要使用壹收款的支付成功页面，则需要在支付成功页面（即创建订单时 result_url 或 success_url 对应的页面）以第一步同样地方式引用 pingpp_one.js，之后调用 pingpp_one.success 接口, success 接口的第二个参数为支付成功页面点击“继续购物”按钮触发的方法，例如：若你需要点击“继续购物”按钮跳转到你的购买页，则在该方法内写入 window.location.href = "你的购买页面 url"。
+2.若要使用壹收款的支付成功页面，则需要在支付成功页面（即创建订单时 result_url 或 success_url 对应的页面）以创建 DOM 的方式引用 pingpp_one.js，将以下代码放在 body 的最后面，之后调用 pingpp_one.success 接口, success 接口的第二个参数为支付成功页面点击“继续购物”按钮触发的方法，例如：若你需要点击“继续购物”按钮跳转到你的购买页，则在该方法内写入 window.location.href = "你的购买页面 url"。
 
     <script type="text/javascript">
-        pingpp_one.success(function(res){
-            if(!res.status){
-                alert(res.msg);
-            }
-        },function(){
-            window.location.href="http://yourdomain.com/payment_succeeded";   //示例
-        });
+        var script=document.createElement('script');
+        script.type='text/javascript';
+        script.src='https://one.pingxx.com/lib/pingpp_one.js';
+        script.onload=function(){
+            pingpp_one.success(function(res){
+                if(!res.status){
+                    alert(res.msg);
+                }
+            },function(){
+                window.location.href="http://pingxx.com";   //示例
+            });
+        };
+        document.body.appendChild(script);
     </script>
 
 ### 微信公众号接入注意事项
