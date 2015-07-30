@@ -22,7 +22,7 @@
                 channel:['alipay_wap','wx_pub','upacp_wap','yeepay_wap','jdpay_wap','bfb_wap'],
                 charge_url:'http://127.0.0.1/createCharge',  //商户服务端创建订单的url
                 charge_param:{a:1,b:2},                      //(可选，用户自定义参数，若存在自定义参数则壹收款会通过 POST 方法透传给 charge_url)
-                open_id:'wx1234567890'                       //(可选，使用微信公众号支付时必须传入)
+                open_id:'Openid'                       //(可选，使用微信公众号支付时必须传入)
             },function(res){
                 if(!res.status){
                     //处理错误
@@ -90,7 +90,7 @@
     $url = \Pingpp\WxpubOAuth::createOauthUrlForCode($wx_app_id, $redirect_url);
     header('Location: ' . $url);
 
-*用户确认授权后，使用 code 获取 openid，其中 $wx_app_secret 是你的微信公众号应用密钥,openid 在调用壹收款 pingpp_pay.init 接口时传入
+*用户确认授权后，使用 code 获取 openid，其中 $wx_app_secret 是你的微信公众号应用密钥,openid 在调用壹收款 pingpp_one.init 接口时传入
 
     <?php
     $code = $_GET['code'];
