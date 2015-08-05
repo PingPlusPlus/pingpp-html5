@@ -5,14 +5,21 @@
 </head>
 <body>
 </body>
-<script type="text/javascript" src="https://one.pingxx.com/lib/pingpp_one.js"></script>
 <script type="text/javascript">
-    pingpp_one.success(function(res){
-        if(!res.status){
-            alert(res.msg);
-        }
-    },function(){
-        window.location.href='https://pingxx.com';
-    });
+    var script=document.createElement('script');
+    script.type='text/javascript';
+    script.src='https://one.pingxx.com/lib/pingpp_one.js';
+    script.onload=function(){
+        document.addEventListener('pingpp_one_ready',function(e){
+            pingpp_one.success(function(res){
+                if(!res.status){
+                    alert(res.msg);
+                }
+            },function(){
+                window.location.href="http://pingxx.com";   //示例
+            });
+        });
+    };
+    document.body.appendChild(script);
 </script>
 </html>
