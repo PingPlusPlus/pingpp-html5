@@ -7,10 +7,10 @@ example-wap 目录里是基于手机浏览器的接入示例；<br>
 example-webview 目录里是 webview 的示例项目，包括 iOS 和 Android。
 
 ## 接入方法
-1. 在你的页面中引入 [pingpp_pay.js](/src/pingpp_pay.js)
+1. 在你的页面中引入 [pingpp.js](/src/pingpp.js)
 
   ``` html
-  <script src="/path/to/pingpp_pay.js"></script>
+  <script src="/path/to/pingpp.js"></script>
   ```
 
 2. 根据 [接入指引](https://pingxx.com/guidance/firstCharge?serverSDK) 和 [API 文档](https://pingxx.com/document/api#api-c-new) 创建 `charge`，取得 `charge` 后，调用 `js` 接口
@@ -59,7 +59,7 @@ _以下示例中，Server-SDK 以 `php` 为例，其他语言请参考各语言 
     }
   }
   ```
-3. 得到 `charge` 后，在页面中引用 `pingpp_pay.js`，调用 `pingpp.createPayment`，结果会直接在 `callback` 中返回。
+3. 得到 `charge` 后，在页面中引用 `pingpp.js`，调用 `pingpp.createPayment`，结果会直接在 `callback` 中返回。
 
   ```js
   pingpp.createPayment(charge, function(result, err) {

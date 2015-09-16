@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.6",
+  version = "2.0.7",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
@@ -9,7 +9,6 @@ var
     ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm',
     UPMP_WAP_URL: 'uppay://uppayservice/?style=token&paydata=',
     JDPAY_WAP_URL: 'https://m.jdpay.com/wepay/web/pay',
-    BFB_SUCCESS: '<html><head><meta name="VIP_BFB_PAYMENT" content="BAIFUBAO"></head><body></body></html>',
     YEEPAY_WAP_URL: 'https://ok.yeepay.com/paymobile/api/pay/request',
     YEEPAY_WAP_TEST_URL: 'http://mobiletest.yeepay.com/paymobile/api/pay/request',
     PINGPP_MOCK_URL: 'http://sissi.pingxx.com/mock.php'
@@ -115,8 +114,8 @@ PingppSDK.prototype = {
       location.href = credential['url'] + '?' + stringify_data(credential, channel);
     } else if (channel == channels.yeepay_wap) {
       var fields = ["merchantaccount", "encryptkey", "data"];
-      for(var k in fields){
-        if(typeof fields[k] !== "function" && !hasOwn.call(credential, fields[k])){
+      for (var k = 0; k < fields.length; k++) {
+        if(!hasOwn.call(credential, fields[k])){
           this._innerCallback("fail", this._error("invalid_credential", "missing_field_"+fields[k]));
           return;
         }
@@ -128,8 +127,8 @@ PingppSDK.prototype = {
       }
     } else if (channel == channels.wx_pub) {
       var fields = ["appId", "timeStamp", "nonceStr", "package", "signType", "paySign"];
-      for (var k in fields) {
-        if (typeof fields[k] !== "function" && !hasOwn.call(credential, fields[k])) {
+      for (var k = 0; k < fields.length; k++) {
+        if (!hasOwn.call(credential, fields[k])) {
           this._innerCallback("fail", this._error("invalid_credential", "missing_field_"+fields[k]));
           return;
         }
@@ -264,6 +263,13 @@ PingppSDK.prototype = {
       };
       if (hasOwn.call(charge, 'order_no')) {
         params['order_no'] = charge['order_no'];
+      } else if (hasOwn.call(charge, 'orderNo')) {
+        params['order_no'] = charge['orderNo'];
+      }
+      if (hasOwn.call(charge, 'time_expire')) {
+        params['time_expire'] = charge['time_expire'];
+      } else if (hasOwn.call(charge, 'timeExpire')) {
+        params['time_expire'] = charge['timeExpire'];
       }
       if (hasOwn.call(charge, 'extra')) {
         params['extra'] = encodeURIComponent(JSON.stringify(charge['extra']));
