@@ -6,7 +6,7 @@ var
   cfg = {
     PINGPP_NOTIFY_URL: 'https://api.pingxx.com/notify/charges/',
     UPACP_WAP_URL: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
-    ALIPAY_WAP_URL: 'http://wappaygw.alipay.com/service/rest.htm',
+    ALIPAY_WAP_URL: 'https://wappaygw.alipay.com/service/rest.htm',
     UPMP_WAP_URL: 'uppay://uppayservice/?style=token&paydata=',
     JDPAY_WAP_URL: 'https://m.jdpay.com/wepay/web/pay',
     YEEPAY_WAP_URL: 'https://ok.yeepay.com/paymobile/api/pay/request',
