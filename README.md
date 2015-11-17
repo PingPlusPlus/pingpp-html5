@@ -13,7 +13,7 @@ example-webview 目录里是 webview 的示例项目，包括 iOS 和 Android。
   <script src="/path/to/pingpp.js"></script>
   ```
 
-2. 根据 [接入指引](https://pingxx.com/guidance/firstCharge?serverSDK) 和 [API 文档](https://pingxx.com/document/api#api-c-new) 创建 `charge`，取得 `charge` 后，调用 `js` 接口
+2. 根据 [接入指引](https://pingxx.com/guidance/server/import) 和 [API 文档](https://pingxx.com/document/api#api-c-new) 创建 `charge`，取得 `charge` 后，调用 `js` 接口
   ``` js
   pingpp.createPayment(charge, function(result, err){
     // 处理错误信息
