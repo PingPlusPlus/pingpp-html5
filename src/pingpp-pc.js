@@ -1,17 +1,19 @@
 (function(){
 var
-  version = "2.0.7",
+  version = "2.0.8",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
     PINGPP_NOTIFY_URL: 'https://api.pingxx.com/notify/charges/',
     PINGPP_MOCK_URL: 'http://sissi.pingxx.com/mock.php',
     ALIPAY_PC_DIRECT_URL: 'https://mapi.alipay.com/gateway.do',
-    UPACP_PC_URL: 'https://gateway.95516.com/gateway/api/frontTransReq.do'
+    UPACP_PC_URL: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
+    CP_B2B_URL: 'https://payment.chinapay.com/CTITS/service/rest/page/nref/000000000017/0/0/0/0/0'
   },
   channels = {
     alipay_pc_direct: 'alipay_pc_direct',
-    upacp_pc: 'upacp_pc'
+    upacp_pc: 'upacp_pc',
+    cp_b2b: 'cp_b2b'
   };
 
 PingppSDK.prototype = {
@@ -86,6 +88,8 @@ PingppSDK.prototype = {
       }
       var query = stringify_data(credential, channel, true);
       window.location.href = cfg.ALIPAY_PC_DIRECT_URL + "?" + query;
+    } else if (channel == channels.cp_b2b) {
+      form_submit(cfg.CP_B2B_URL, 'post', credential);
     }
   },
 
