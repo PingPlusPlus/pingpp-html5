@@ -48,7 +48,8 @@
                 console.log(xhr.responseText);
                 pingppPc.createPayment(xhr.responseText, function(result, err) {
                     console.log(result);
-                    console.log(err);
+                    console.log(err.msg);
+                    console.log(err.extra);
                 });
             }
         }
