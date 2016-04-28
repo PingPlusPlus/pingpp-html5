@@ -7,18 +7,33 @@ example-wap 目录里是基于手机浏览器的接入示例；<br>
 example-webview 目录里是 webview 的示例项目，包括 iOS 和 Android。
 
 ## 接入方法
-1. 在你的页面中引入 [pingpp.js](/src/pingpp.js)
+1. 在你的页面中引入
+  - [pingpp.js](/src/pingpp.js)  手机web
+  - [pingpp-pc.js](/src/pingpp-pc.js)  PC端
 
   ``` html
   <script src="/path/to/pingpp.js"></script>
   ```
 
-2. 根据 [接入指引](https://pingxx.com/guidance/server/import) 和 [API 文档](https://pingxx.com/document/api#api-c-new) 创建 `charge`，取得 `charge` 后，调用 `js` 接口
-  ``` js
-  pingpp.createPayment(charge, function(result, err){
-    // 处理错误信息
-  });
+2. 根据 [接入指引](https://pingxx.com/guidance/server/import) 和 [API 文档](https://pingxx.com/document/api#api-c-new) 创建 
+
+ 手机web
+  
+    ``` js
+    pingpp.createPayment(charge, function(result, err){
+      // 处理错误信息
+    });
+    ```
+   
+  PC端
+ 
+   ```js
+   pingppPc.createPayment(charge, function(result, err){
+     // 处理错误信息
+   });
+ 
   ```
+
   如果 `charge` 正确的话，会跳转到相应的支付页面，要求用户进行付款。
 
 3. 用户支付成功后，会跳转到创建 `charge` 时定义的 `result_url` 或者 `success_url`。如果用户取消支付，则会跳转到 `result_url` 或者 `cancel_url`（具体情况根据渠道不同会有所变化）。
