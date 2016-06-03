@@ -89,8 +89,8 @@ _以下示例中，Server-SDK 以 `php` 为例，其他语言请参考各语言 
   });
   ```
 
-### 使用微信 JS-SDK
-如果使用微信 JS-SDK 来调起支付，需要在创建 `charge` 后，获取签名（`signature`），传给 HTML5 SDK。
+### 使用微信 JS-SDK（此步骤非必需）
+如果你同时使用了微信 JS-SDK，并想用它来调起支付，需要在创建 `charge` 后，获取签名（`signature`），传给 HTML5 SDK。
 
 ```php
 $jsapi_ticket_arr = \Pingpp\WxpubOAuth::getJsapiTicket($wx_app_id, $wx_app_secret);
@@ -105,7 +105,7 @@ $signature = \Pingpp\WxpubOauth::getSignature($charge, $ticket);
 pingpp.createPayment(charge, callback, signature, false);
 ```
 
-## 在微信客户端中使用支付宝手机网页支付（`alipay_wap`）
+## 在微信客户端中使用支付宝手机网页支付（alipay_wap）
 你需要把 [alipay_in_weixin](/alipay_in_weixin) 目录下的两个文件分别放到你的服务器目录。
 
 `ap.js` 只需要在需要调用支付宝的网页中引入
