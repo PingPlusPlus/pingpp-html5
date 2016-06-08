@@ -1,6 +1,6 @@
 (function(){
 var
-  version = "2.0.7",
+  version = "2.0.9",
   hasOwn = {}.hasOwnProperty,
   PingppSDK = function(){},
   cfg = {
@@ -304,6 +304,9 @@ function stringify_data(data, channel, urlencode) {
   }
   var output = [];
   for (var i in data) {
+    if (!hasOwn.call(data, i) || typeof data[i] === 'function') {
+      continue;
+    }
     if (channel == "bfb_wap" && i == "url") {
       continue;
     }
